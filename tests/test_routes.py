@@ -189,7 +189,7 @@ class TestAccountService(TestCase):
         self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_account_delete_not_found(self):
-        """It should not read a not existing Account"""
+        """It should not delete a not existing Account"""
         # client read
         new_account_id = 0 # can't exist
         retrieve_response = self.client.delete(
@@ -197,7 +197,6 @@ class TestAccountService(TestCase):
             content_type="application/json"
         )
         self.assertEqual(retrieve_response.status_code, status.HTTP_204_NO_CONTENT) 
-
 
     # UPDATE AN EXISTING ACCOUNT #########################################
     def test_update_account(self):
@@ -220,8 +219,8 @@ class TestAccountService(TestCase):
                 )
             )
     
-    def test_account_not_found(self):
-        """It should not read a not existing Account"""
+    def test_account_update_not_found(self):
+        """It should not update a not existing Account"""
         # client update
         new_account_id = 0 # can't exist
         retrieve_response = self.client.put(
@@ -257,7 +256,7 @@ class TestAccountService(TestCase):
         self.assertEqual(count_tested, created_number)
         self.assertEqual(len(retrieved_accounts_json_list), created_number)
 
-    def test_get_empty_account_list(self):
+    def test_get_empty_accounts_list(self):
         """It should Get an empty list of Accounts"""
         # list
         retrieved_accounts_response = self.client.get(BASE_URL)
@@ -267,7 +266,7 @@ class TestAccountService(TestCase):
         self.assertEqual(len(retrieved_accounts_json_list), 0)
         
         
-
+    # TEST METHOD NOT ALLOWED ###########################################
     def test_method_not_allowed(self):
         """It should not allow an illegal method call"""
         error_response = self.client.delete(BASE_URL)

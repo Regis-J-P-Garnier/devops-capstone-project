@@ -69,6 +69,7 @@ def get_accounts(account_id):
     app.logger.info("Request to read Account(id == %s).", account_id)
     account = Account.find(account_id)
     if account is None:
+        app.logger.warning(f"Account(id == [{account_id}]) not found for read.")
         abort(status.HTTP_404_NOT_FOUND, f"Account(id == [{account_id}]) not found.")
     return jsonify(account.serialize()), status.HTTP_200_OK
 
