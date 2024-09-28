@@ -51,7 +51,6 @@ class TestAccountService(TestCase):
     def tearDown(self):
         """Runs once after each test case"""
         db.session.remove()
-            
 
     ######################################################################
     #  H E L P E R   M E T H O D S
@@ -71,24 +70,27 @@ class TestAccountService(TestCase):
             new_account = response.get_json()
             account.id = new_account["id"]
             if is_json:
-                accounts.append(account.serialize())    
+                accounts.append(account.serialize())
             else:
                 accounts.append(account)
         return accounts
-    
+
     def _create_account(self, is_json=False):
         """Factory method to create one account"""
         accounts = self._create_accounts(1, is_json)
         return accounts[0]
-    
+
     def are_accounts_json_equals(self, account_a, account_b):
-        are_equals =  True
+        are_equals = True
         are_equals = are_equals and (account_a["id"] == account_b["id"])
         are_equals = are_equals and (account_a["name"] == account_b["name"])
         are_equals = are_equals and (account_a["email"] == account_b["email"])
-        are_equals = are_equals and (account_a["address"] == account_b["address"])
-        are_equals = are_equals and (account_a["phone_number"] == account_b["phone_number"])
-        are_equals = are_equals and (account_a["date_joined"] == account_b["date_joined"])        
+        are_equals = are_equals and (
+            account_a["address"] == account_b["address"])
+        are_equals = are_equals and (
+            account_a["phone_number"] == account_b["phone_number"])
+        are_equals = are_equals and (
+            account_a["date_joined"] == account_b["date_joined"])
         return are_equals
 
     ######################################################################
@@ -142,48 +144,50 @@ class TestAccountService(TestCase):
             json=account.serialize(),
             content_type="test/html"
         )
-        self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
-    
+        self.assertEqual(response.status_code,
+                         status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+
     # READ AN ACCOUNT ####################################################
     # ... place you code here to READ an account ...
     def test_read_account(self):
         """It should read an existing Account"""
         # create with factory helper
         new_account_json = self._create_account(is_json=True)
-        
-        # client read 
+
+        # client read
         new_account_id = new_account_json["id"]
         retrieve_response = self.client.get(
-            f"{BASE_URL}/{new_account_id}", 
+            f"{BASE_URL}/{new_account_id}",
             content_type="application/json"
         )
         self.assertEqual(retrieve_response.status_code, status.HTTP_200_OK)
         retrieved_account_json = retrieve_response.get_json()
-        
+
         # Valid retrieved data
         self.assertTrue(
             self.are_accounts_json_equals(
                 new_account_json,
                 retrieved_account_json
-                )
             )
+        )
 
     def test_account_not_found(self):
         """It should not read a not existing Account"""
         # client read
-        new_account_id = 0 # can't exist
+        new_account_id = 0  # can't exist
         retrieve_response = self.client.get(
-            f"{BASE_URL}/{new_account_id}", 
+            f"{BASE_URL}/{new_account_id}",
             content_type="application/json"
         )
-        self.assertEqual(retrieve_response.status_code, status.HTTP_404_NOT_FOUND)
-        
+        self.assertEqual(retrieve_response.status_code,
+                         status.HTTP_404_NOT_FOUND)
+
     # DELETE AN ACCOUNT ##################################################
     def test_delete_account(self):
         """It should Delete an Account"""
         # create with factory helper
         new_account_json = self._create_account(is_json=True)
-        # client delete 
+        # client delete
         new_account_id = new_account_json["id"]
         resp = self.client.delete(f"{BASE_URL}/{new_account_id}")
         self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
@@ -191,12 +195,13 @@ class TestAccountService(TestCase):
     def test_account_delete_not_found(self):
         """It should not delete a not existing Account"""
         # client read
-        new_account_id = 0 # can't exist
+        new_account_id = 0  # can't exist
         retrieve_response = self.client.delete(
-            f"{BASE_URL}/{new_account_id}", 
+            f"{BASE_URL}/{new_account_id}",
             content_type="application/json"
         )
-        self.assertEqual(retrieve_response.status_code, status.HTTP_204_NO_CONTENT) 
+        self.assertEqual(retrieve_response.status_code,
+                         status.HTTP_204_NO_CONTENT)
 
     # UPDATE AN EXISTING ACCOUNT #########################################
     def test_update_account(self):
@@ -204,10 +209,11 @@ class TestAccountService(TestCase):
         test_str = "dummy string for testing purpose only"
         # create
         new_account_json = self._create_account(is_json=True)
-        self.assertNotEqual(new_account_json["name"],test_str)
+        self.assertNotEqual(new_account_json["name"], test_str)
         # update
         new_account_json["name"] = test_str
-        update_response = self.client.put(f"{BASE_URL}/{new_account_json['id']}", json=new_account_json)
+        update_response = self.client.put(
+            f"{BASE_URL}/{new_account_json['id']}", json=new_account_json)
         # Valid retrieved data
         self.assertEqual(update_response.status_code, status.HTTP_200_OK)
         updated_account_json = update_response.get_json()
@@ -216,19 +222,20 @@ class TestAccountService(TestCase):
             self.are_accounts_json_equals(
                 new_account_json,
                 updated_account_json
-                )
             )
-    
+        )
+
     def test_account_update_not_found(self):
         """It should not update a not existing Account"""
         # client update
-        new_account_id = 0 # can't exist
+        new_account_id = 0  # can't exist
         retrieve_response = self.client.put(
-            f"{BASE_URL}/{new_account_id}", 
+            f"{BASE_URL}/{new_account_id}",
             content_type="application/json"
         )
-        self.assertEqual(retrieve_response.status_code, status.HTTP_404_NOT_FOUND)   
-      
+        self.assertEqual(retrieve_response.status_code,
+                         status.HTTP_404_NOT_FOUND)
+
     # LIST ALL ACCOUNTS ##################################################
 
     # ... place you code here to LIST accounts ...
@@ -236,10 +243,12 @@ class TestAccountService(TestCase):
         """It should Get a list of Accounts"""
         # create
         created_number = 5
-        new_accounts_json_list = self._create_accounts(created_number, is_json=True)
+        new_accounts_json_list = self._create_accounts(
+            created_number, is_json=True)
         # list
         retrieved_accounts_response = self.client.get(BASE_URL)
-        self.assertEqual(retrieved_accounts_response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            retrieved_accounts_response.status_code, status.HTTP_200_OK)
         retrieved_accounts_json_list = retrieved_accounts_response.get_json()
         # test same number and the same ones
         count_tested = 0
@@ -251,8 +260,8 @@ class TestAccountService(TestCase):
                         self.are_accounts_json_equals(
                             retrieved_account_json,
                             new_account_json
-                            )
-                        )            
+                        )
+                    )
         self.assertEqual(count_tested, created_number)
         self.assertEqual(len(retrieved_accounts_json_list), created_number)
 
@@ -260,14 +269,16 @@ class TestAccountService(TestCase):
         """It should Get an empty list of Accounts"""
         # list
         retrieved_accounts_response = self.client.get(BASE_URL)
-        self.assertEqual(retrieved_accounts_response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            retrieved_accounts_response.status_code, status.HTTP_200_OK)
         retrieved_accounts_json_list = retrieved_accounts_response.get_json()
         # test same number and the same ones
         self.assertEqual(len(retrieved_accounts_json_list), 0)
-        
-        
+
     # TEST METHOD NOT ALLOWED ###########################################
+
     def test_method_not_allowed(self):
         """It should not allow an illegal method call"""
         error_response = self.client.delete(BASE_URL)
-        self.assertEqual(error_response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(error_response.status_code,
+                         status.HTTP_405_METHOD_NOT_ALLOWED)
