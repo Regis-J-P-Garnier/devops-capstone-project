@@ -153,7 +153,7 @@ class TestAccountService(TestCase):
         # create with factory helper
         new_account_json = self._create_account(is_json=True)
         
-        # client  
+        # client read 
         new_account_id = new_account_json["id"]
         retrieve_response = self.client.get(
             f"{BASE_URL}/{new_account_id}", 
@@ -172,7 +172,7 @@ class TestAccountService(TestCase):
 
     def test_account_not_found(self):
         """It should not read a not existing Account"""
-        # client  
+        # client read
         new_account_id = 0 # can't exist
         retrieve_response = self.client.get(
             f"{BASE_URL}/{new_account_id}", 
@@ -180,6 +180,29 @@ class TestAccountService(TestCase):
         )
         self.assertEqual(retrieve_response.status_code, status.HTTP_404_NOT_FOUND)
         
+    # DELETE AN ACCOUNT ##################################################
+    def test_delete_account(self):
+        """It should Delete an Account"""
+        # create with factory helper
+        new_account_json = self._create_account(is_json=True)
+        # client delete 
+        new_account_id = new_account_json["id"]
+        resp = self.client.delete(f"{BASE_URL}/{new_account_id}")
+        self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_account_delete_not_found(self):
+        """It should not read a not existing Account"""
+        # client read
+        new_account_id = 0 # can't exist
+        retrieve_response = self.client.delete(
+            f"{BASE_URL}/{new_account_id}", 
+            content_type="application/json"
+        )
+        self.assertEqual(retrieve_response.status_code, status.HTTP_204_NO_CONTENT) 
+
+    # UPDATE AN EXISTING ACCOUNT #########################################
+
+    
       
     # LIST ALL ACCOUNTS ##################################################
 
@@ -192,29 +215,6 @@ class TestAccountService(TestCase):
     """
 
 
-    # UPDATE AN EXISTING ACCOUNT #########################################
-
-    # ... place you code here to UPDATE an account ...
-    """
-    Update
-
-        Update should accept an account_id and use Account.find() to find the account.
-        It should return an HTTP_404_NOT_FOUND if the account cannot be found.
-        If the account is found, it should call the deserialize() method on the account instance passing in request.get_json() and call the update() method to update the account in the database.
-        It should call the serialize() method on the account instance and return a Python dictionary with a return code of HTTP_200_OK.
-    """
 
 
-    # DELETE AN ACCOUNT ##################################################
 
-    # ... place you code here to DELETE an account ...
-    """
-    Delete
-
-        Delete should accept an account_id and use Account.find() to find the account.
-        If the account is not found, it should do nothing.
-        If the account is found, it should call the delete() method on the account instance to delete it from the database.
-        It should return an empty body "" with a return code of HTTP_204_NO_CONTENT.
-
-    Use these hints to write your test cases first, and then write the code to make the test cases pass.
-    """
