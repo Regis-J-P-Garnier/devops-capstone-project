@@ -114,14 +114,24 @@ def update_accounts(account_id):
 ######################################################################
 # LIST ALL ACCOUNTS
 ######################################################################
-
-# ... place you code here to LIST accounts ...
-"""
-List
-
-    List should use the Account.all() method to return all of the accounts as a list of dict and return the HTTP_200_OK return code.
-    It should never send back a 404_NOT_FOUND. If you do not find any accounts, send back an empty list ([]) and 200_OK.
-"""
+@app.route("/accounts", methods=["GET"])
+def list_accounts():
+    """
+    List all Accounts
+    This endpoint will list all Accounts
+    """
+    app.logger.info("Request a list of all Accounts.")
+    accounts_list = Account.all()
+    accounts_json_list = [account.serialize() for account in accounts_list]
+    if len(accounts_json_list)<1:
+       app.logger.warning(f"Empty list of all Accounts.")
+    app.logger.info("Returning the %s Account(s)", len(accounts_json_list))
+    return jsonify(accounts_json_list), status.HTTP_200_OK
+                
+                
+    
+    
+    
 
 
 

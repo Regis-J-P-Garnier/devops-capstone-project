@@ -143,8 +143,6 @@ class TestAccountService(TestCase):
             content_type="test/html"
         )
         self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
-
-    # ADD YOUR TEST CASES HERE ...
     
     # READ AN ACCOUNT ####################################################
     # ... place you code here to READ an account ...
@@ -235,14 +233,35 @@ class TestAccountService(TestCase):
     # LIST ALL ACCOUNTS ##################################################
 
     # ... place you code here to LIST accounts ...
-    """
-    List
+    def test_get_account_list(self):
+        """It should Get a list of Accounts"""
+        # create
+        created_number = 5
+        new_accounts_json_list = self._create_accounts(created_number, is_json=True)
+        # list
+        retrieved_accounts_response = self.client.get(BASE_URL)
+        self.assertEqual(retrieved_accounts_response.status_code, status.HTTP_200_OK)
+        retrieved_accounts_json_list = retrieved_accounts_response.get_json()
+        # test same number and the same ones
+        count_tested = 0
+        for retrieved_account_json in retrieved_accounts_json_list:
+            for new_account_json in new_accounts_json_list:
+                if retrieved_account_json["id"] == new_account_json["id"]:
+                    count_tested += 1
+                    self.assertTrue(
+                        self.are_accounts_json_equals(
+                            retrieved_account_json,
+                            new_account_json
+                            )
+                        )            
+        self.assertEqual(count_tested, created_number)
+        self.assertEqual(len(retrieved_accounts_json_list), created_number)
 
-        List should use the Account.all() method to return all of the accounts as a list of dict and return the HTTP_200_OK return code.
-        It should never send back a 404_NOT_FOUND. If you do not find any accounts, send back an empty list ([]) and 200_OK.
-    """
-
-
-
-
-
+    def test_get_empty_account_list(self):
+        """It should Get an empty list of Accounts"""
+        # list
+        retrieved_accounts_response = self.client.get(BASE_URL)
+        self.assertEqual(retrieved_accounts_response.status_code, status.HTTP_200_OK)
+        retrieved_accounts_json_list = retrieved_accounts_response.get_json()
+        # test same number and the same ones
+        self.assertEqual(len(retrieved_accounts_json_list), 0)
