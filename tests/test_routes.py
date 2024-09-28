@@ -169,7 +169,18 @@ class TestAccountService(TestCase):
                 retrieved_account_json
                 )
             )
+
+    def test_read_not_found_account(self):
+        """It should not read a not existing Account"""
+        # client  
+        new_account_id = 0 # can't exist
+        retrieve_response = self.client.get(
+            f"{BASE_URL}/{new_account_id}", 
+            content_type="application/json"
+        )
+        self.assertEqual(retrieve_response.status_code, status.HTTP_404_NOT_FOUND)
         
+      
     # LIST ALL ACCOUNTS ##################################################
 
     # ... place you code here to LIST accounts ...

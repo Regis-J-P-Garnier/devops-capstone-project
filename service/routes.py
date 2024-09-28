@@ -72,6 +72,7 @@ def get_accounts(account_id):
         abort(status.HTTP_404_NOT_FOUND, f"Account(id == [{account_id}]) not found.")
     return jsonify(account.serialize()), status.HTTP_200_OK
 
+
 ######################################################################
 # LIST ALL ACCOUNTS
 ######################################################################
