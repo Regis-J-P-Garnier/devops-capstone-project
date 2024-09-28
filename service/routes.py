@@ -136,7 +136,7 @@ def list_accounts():
     accounts_list = Account.all()
     accounts_json_list = [account.serialize() for account in accounts_list]
     if len(accounts_json_list) < 1:
-        app.logger.warning(f"Empty list of all Accounts.")
+        app.logger.warning("Empty list of all Accounts.")
     app.logger.info("Returning the %s Account(s)", len(accounts_json_list))
     return jsonify(accounts_json_list), status.HTTP_200_OK
 
