@@ -58,6 +58,21 @@ def create_accounts():
     )
 
 ######################################################################
+# READ AN ACCOUNT
+######################################################################
+@app.route("/accounts/<int:account_id>", methods=["GET"])
+def get_accounts(account_id):
+    """
+    Reads an Account
+    This endpoint will read an Account based the account_id that is requested
+    """
+    app.logger.info("Request to read an Account(id == %s).", account_id)
+    account = Account.find(account_id)
+    if account is None:
+        abort(status.HTTP_404_NOT_FOUND, f"Account(id == [{account_id}]) not found.")
+    return jsonify(account.serialize()), status.HTTP_200_OK
+
+######################################################################
 # LIST ALL ACCOUNTS
 ######################################################################
 
@@ -67,21 +82,6 @@ List
 
     List should use the Account.all() method to return all of the accounts as a list of dict and return the HTTP_200_OK return code.
     It should never send back a 404_NOT_FOUND. If you do not find any accounts, send back an empty list ([]) and 200_OK.
-"""
-
-
-######################################################################
-# READ AN ACCOUNT
-######################################################################
-
-# ... place you code here to READ an account ...
-
-"""
-Read
-
-    Read should accept an account_id and use Account.find() to find the account.
-    It should return an HTTP_404_NOT_FOUND if the account cannot be found.
-    If the account is found, it should call the serialize() method on the account instance and return a Python dictionary with a return code of HTTP_200_OK.
 """
 
 

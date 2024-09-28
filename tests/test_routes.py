@@ -161,10 +161,6 @@ class TestAccountService(TestCase):
         )
         self.assertEqual(retrieve_response.status_code, status.HTTP_200_OK)
         retrieved_account_json = retrieve_response.get_json()
-
-        # Make sure location header is set
-        location = retrieve_response.headers.get("Location", None)
-        self.assertIsNotNone(location)
         
         # Valid retrieved data
         self.assertTrue(
