@@ -62,6 +62,12 @@ def create_accounts():
 ######################################################################
 
 # ... place you code here to LIST accounts ...
+"""
+List
+
+    List should use the Account.all() method to return all of the accounts as a list of dict and return the HTTP_200_OK return code.
+    It should never send back a 404_NOT_FOUND. If you do not find any accounts, send back an empty list ([]) and 200_OK.
+"""
 
 
 ######################################################################
@@ -70,20 +76,44 @@ def create_accounts():
 
 # ... place you code here to READ an account ...
 
+"""
+Read
+
+    Read should accept an account_id and use Account.find() to find the account.
+    It should return an HTTP_404_NOT_FOUND if the account cannot be found.
+    If the account is found, it should call the serialize() method on the account instance and return a Python dictionary with a return code of HTTP_200_OK.
+"""
+
 
 ######################################################################
 # UPDATE AN EXISTING ACCOUNT
 ######################################################################
 
 # ... place you code here to UPDATE an account ...
+"""
+Update
 
+    Update should accept an account_id and use Account.find() to find the account.
+    It should return an HTTP_404_NOT_FOUND if the account cannot be found.
+    If the account is found, it should call the deserialize() method on the account instance passing in request.get_json() and call the update() method to update the account in the database.
+    It should call the serialize() method on the account instance and return a Python dictionary with a return code of HTTP_200_OK.
+"""
 
 ######################################################################
 # DELETE AN ACCOUNT
 ######################################################################
 
 # ... place you code here to DELETE an account ...
+"""
+Delete
 
+    Delete should accept an account_id and use Account.find() to find the account.
+    If the account is not found, it should do nothing.
+    If the account is found, it should call the delete() method on the account instance to delete it from the database.
+    It should return an empty body "" with a return code of HTTP_204_NO_CONTENT.
+
+Use these hints to write your test cases first, and then write the code to make the test cases pass.
+"""
 
 ######################################################################
 #  U T I L I T Y   F U N C T I O N S
