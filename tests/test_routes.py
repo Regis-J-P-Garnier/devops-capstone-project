@@ -170,7 +170,7 @@ class TestAccountService(TestCase):
                 )
             )
 
-    def test_read_not_found_account(self):
+    def test_account_not_found(self):
         """It should not read a not existing Account"""
         # client  
         new_account_id = 0 # can't exist
