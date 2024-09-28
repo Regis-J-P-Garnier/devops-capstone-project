@@ -200,9 +200,37 @@ class TestAccountService(TestCase):
         )
         self.assertEqual(retrieve_response.status_code, status.HTTP_204_NO_CONTENT) 
 
-    # UPDATE AN EXISTING ACCOUNT #########################################
 
+    # UPDATE AN EXISTING ACCOUNT #########################################
+    def test_update_account(self):
+        """It should Update an existing Account"""
+        test_str = "dummy string for testing purpose only"
+        # create
+        new_account_json = self._create_account(is_json=True)
+        self.assertNotEqual(new_account_json["name"],test_str)
+        # update
+        new_account_json["name"] = test_str
+        update_response = self.client.put(f"{BASE_URL}/{new_account_json['id']}", json=new_account_json)
+        # Valid retrieved data
+        self.assertEqual(update_response.status_code, status.HTTP_200_OK)
+        updated_account_json = update_response.get_json()
+        self.assertEqual(updated_account_json["name"], test_str)
+        self.assertTrue(
+            self.are_accounts_json_equals(
+                new_account_json,
+                updated_account_json
+                )
+            )
     
+    def test_account_not_found(self):
+        """It should not read a not existing Account"""
+        # client update
+        new_account_id = 0 # can't exist
+        retrieve_response = self.client.put(
+            f"{BASE_URL}/{new_account_id}", 
+            content_type="application/json"
+        )
+        self.assertEqual(retrieve_response.status_code, status.HTTP_404_NOT_FOUND)   
       
     # LIST ALL ACCOUNTS ##################################################
 
