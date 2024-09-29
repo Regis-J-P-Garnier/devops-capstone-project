@@ -25,6 +25,7 @@ HTTPS_ENVIRON = {'wsgi.url_scheme': 'https'}
 #  T E S T   C A S E S
 ######################################################################
 
+
 class TestAccountService(TestCase):
     """Account Service Tests"""
 
@@ -287,7 +288,6 @@ class TestAccountService(TestCase):
     ######################################################################
     #  S E C U R I T Y   T E S T   C A S E S
     ######################################################################
-
 
     def test_security_headers(self):
         """It should return security headers"""
